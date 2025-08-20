@@ -127,7 +127,7 @@ if 'consulta_data' not in st.session_state:
     st.session_state.consulta_data = {}
 
 # Configuração do Power Automate (substitui pela tua URL)
-POWER_AUTOMATE_URL = "https://prod-XX.westeurope.logic.azure.com:443/workflows/XXXXXXXX/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=XXXXXXXX"
+POWER_AUTOMATE_URL = "https://prod-79.westeurope.logic.azure.com:443/workflows/755f25a5df08481e98f96f5f4571d616/triggers/manual/paths/invoke?api-version=2016-06-01"
 
 # Função para chamar Power Automate
 def trigger_power_automate():
