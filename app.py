@@ -139,23 +139,35 @@ def trigger_power_automate():
             "action": "consulta_workflow"
         }
         
-        # Headers
+        # Headers mais completos
         headers = {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'User-Agent': 'Streamlit-App/1.0',
+            'Accept': 'application/json'
         }
         
-        # Fazer o POST request
+        # Fazer o POST request com verificação SSL desabilitada para testes
         response = requests.post(
             POWER_AUTOMATE_URL, 
             json=payload, 
             headers=headers,
-            timeout=30
+            timeout=30,
+            verify=True  # Manter True para produção
         )
         
+        # Debug: mostrar detalhes da resposta
         if response.status_code == 200 or response.status_code == 202:
             return True, "✅ Fluxo executado com sucesso!"
+        elif response.status_code == 401:
+            return False, f"❌ Erro 401: Não autorizado. Verifica se a URL inclui todos os parâmetros (sig, sp, sv, api-version)"
+        elif response.status_code == 403:
+            return False, f"❌ Erro 403: Acesso negado. Verifica se o fluxo está ativo e partilhado"
         else:
-            return False, f"❌ Erro: {response.status_code}"
+            # Debug temporário - remove depois de funcionar
+            st.write(f"Debug - Status: {response.status_code}")
+            st.write(f"Debug - Headers: {dict(response.headers)}")
+            st.write(f"Debug - Response: {response.text[:500]}")
+            return False, f"❌ Erro {response.status_code}: {response.text[:200]}"
             
     except requests.exceptions.RequestException as e:
         return False, f"❌ Erro de conexão: {str(e)}"
